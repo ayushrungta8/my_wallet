@@ -60,10 +60,10 @@ const ConnectedComponent = () => {
   };
   const makeTransaction = () => {
     setShowLoading(true);
-    setShowTransaction(true);
     setShowBalance(false);
     setShowChainId(false);
     sendTransaction?.();
+    setShowTransaction(true);
   };
   return (
     <Container>
