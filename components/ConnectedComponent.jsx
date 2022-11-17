@@ -22,18 +22,19 @@ const ConnectedComponent = () => {
   const { config } = usePrepareSendTransaction({
     request: { to: address, value: BigNumber.from("100000000000") },
   });
-  const { sendTransaction, isError, isSuccess, data } = useSendTransaction({
-    ...config,
-    onError: (error) => {
-      setShowBalance(false);
-      setShowChainId(false);
-      setShowLoading(false);
-    },
-    onSuccess: (transaction) => {
-      setShowTransaction(true);
-      setShowLoading(false);
-    },
-  });
+  const { sendTransaction, isError, isSuccess, data, isLoading } =
+    useSendTransaction({
+      ...config,
+      onError: (error) => {
+        setShowBalance(false);
+        setShowChainId(false);
+        setShowLoading(false);
+      },
+      onSuccess: (transaction) => {
+        setShowTransaction(true);
+        setShowLoading(false);
+      },
+    });
 
   const [balance, setBalance] = React.useState(null);
   const [showChainId, setShowChainId] = React.useState(false);
@@ -95,29 +96,50 @@ const ConnectedComponent = () => {
         </PrimaryButtonContainer>
       </ChoiceContainer>
       <ResultContainer>
-        {/* <img src={"/loader.svg"} alt="" /> */}
-        <ResultTitle>
-          Output
-          {showLoading && <img src={"/loader.svg"} alt="" />}
-        </ResultTitle>
         {showChainId && (
-          <ResultCard>
-            <span>Chain ID</span>
-            <p>1</p>
-          </ResultCard>
+          <>
+            <ResultTitle>
+              Output
+              {showLoading && <img src={"/loader.svg"} alt="" />}
+            </ResultTitle>
+            <ResultCard>
+              <span>Chain ID</span>
+              <p>{chain.id}</p>
+            </ResultCard>
+          </>
         )}
         {showBalance && (
-          <ResultCard>
-            <span>Balance</span>
-            <p>{balance}</p>
-          </ResultCard>
+          <>
+            <ResultTitle>
+              Output
+              {showLoading && <img src={"/loader.svg"} alt="" />}
+            </ResultTitle>
+            <ResultCard>
+              <span>Balance</span>
+              <p>{balance}</p>
+            </ResultCard>
+          </>
         )}
 
         {showTransaction && (
-          <ResultCard>
-            <span>Transaction status</span>
-            <p>{isSuccess ? "Success" : "Failed"}</p>
-          </ResultCard>
+          <>
+            <ResultTitle>
+              Output
+              {showLoading && <img src={"/loader.svg"} alt="" />}
+            </ResultTitle>
+            <ResultCard>
+              <span>Transaction status</span>
+              <p>
+                {isLoading ? (
+                  <img src={"/loader.svg"} alt="" />
+                ) : isSuccess ? (
+                  "Success"
+                ) : (
+                  "Failed"
+                )}
+              </p>
+            </ResultCard>
+          </>
         )}
       </ResultContainer>
     </Container>
@@ -241,6 +263,9 @@ const ResultContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
+  img {
+    height: 12px;
+  }
 `;
 const ResultTitle = styled.div`
   gap: 12px;
